@@ -58,7 +58,7 @@
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
 //Mode and EEPROM variables
-uint8_t maxMode = 5;                                          // Maximum number of display modes. Would prefer to get this another way, but whatever.
+uint8_t maxMode = 13;                                          // Maximum number of display modes. Would prefer to get this another way, but whatever.
 int eepaddress = 0;
 
 // Global variables can be changed on the fly.
