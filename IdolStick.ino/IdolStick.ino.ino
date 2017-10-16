@@ -85,7 +85,7 @@ void setup() {
   LEDS.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(leds, NUM_LEDS);  // Use this for WS2812
 
   FastLED.setBrightness(max_bright);
-  set_max_power_in_volts_and_milliamps(5, 600);               // FastLED Power management set at 5V, 500mA.
+  set_max_power_in_volts_and_milliamps(5, 500);               // FastLED Power management set at 5V, 500mA.
 
   gCurrentPatternNumber = EEPROM.read(eepaddress);
 
@@ -99,7 +99,7 @@ void setup() {
 
 
 
-SimplePatternList gPatterns = {rainbow, white, green, red, blue, aqua, yellow, orange, pink, purple, effect1, effect2 };               // Don't know why this has to be here. . .
+SimplePatternList gPatterns = {white, green, red, blue, aqua, yellow, orange, pink, purple, rainbow, effect1, effect2 };               // Don't know why this has to be here. . . (me neither - LM)
 
  
 
@@ -147,12 +147,6 @@ void readbutton() {                                           // Read the button
 
 
 //--------------------[ Effects are below here ]------------------------------------------------------------------------------
-
-void rainbow() {
-
-  fill_rainbow(leds, NUM_LEDS, gHue, 7);                      // FastLED's built-in rainbow generator.
-  
-} // rainbow()
 
 
 
@@ -233,6 +227,12 @@ fill_solid(leds, NUM_LEDS, CRGB::Purple);
 } // Purple()
 
 
+void rainbow() {
+
+  fill_rainbow(leds, NUM_LEDS, gHue, 7);                      // FastLED's built-in rainbow generator.
+  
+} // rainbow()
+
 void effect1() {                                               // Eight colored dots, weaving in and out of sync with each other.
 
  // a colored dot sweeping back and forth, with fading trails
@@ -252,3 +252,5 @@ void effect2() {
   
   
 } // Confetti and shit()
+
+
