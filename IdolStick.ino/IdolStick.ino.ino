@@ -99,7 +99,7 @@ void setup() {
 
 
 
-SimplePatternList gPatterns = {white, green, red, blue, aqua, yellow, orange, pink, purple, rainbow, effect1, effect2 };               // Don't know why this has to be here. . . (me neither - LM)
+SimplePatternList gPatterns = {white, green, red, blue, aqua, miku, yellow, orange, pink, purple, rainbow, effect1, effect2 };               // Don't know why this has to be here. . . (me neither - LM)
 
  
 
@@ -192,7 +192,12 @@ fill_solid(leds, NUM_LEDS, CRGB::Aqua);
   
 } // Aqua()
 
+void miku() {                                              // A colored dot sweeping back and forth, with fading trails.
 
+fill_solid(leds, NUM_LEDS, CRGB(50,255,50));  
+
+  
+} // Miku Green()
 
 void yellow() {                                                  // Colored stripes pulsing at a defined Beats-Per-Minute.
 
