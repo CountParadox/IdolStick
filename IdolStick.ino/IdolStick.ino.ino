@@ -20,6 +20,11 @@
  * 
  * There's also debug output to the serial monitor . . just to be sure.
  * 
+ * LEDs are connected to PIN 10
+ * Button is on PIN 6
+ * There are 14 LEDs, in two parrallel groups of 7, so make sure NUM_LEDS is set to 7
+ * The LED_TYPE is WS2812 and the COLOR_ORDER is GRB
+ * 
  * Requirements:
  * 
  * In addition, to FastLED, you need to download and install JChristensen's button library, available at:
@@ -44,7 +49,7 @@
 #define LED_CK 16                                             // Clock pin for WS2801 or APA102.
 #define COLOR_ORDER GRB                                       // It's GRB for WS2812 and BGR for APA102.
 #define LED_TYPE WS2812                                       // Using APA102, WS2812, WS2801. Don't forget to modify LEDS.addLeds to suit.
-#define NUM_LEDS 22                                           // Number of LED's.
+#define NUM_LEDS 7                                            // Number of LED's.
 
 
 
@@ -57,7 +62,7 @@ uint8_t maxMode = 5;                                          // Maximum number 
 int eepaddress = 0;
 
 // Global variables can be changed on the fly.
-uint8_t max_bright = 128;                                     // Overall brightness definition. It can be changed on the fly.
+uint8_t max_bright = 200;                                     // Overall brightness definition. It can be changed on the fly.
 
 struct CRGB leds[NUM_LEDS];                                   // Initialize our LED array.
 
@@ -94,7 +99,7 @@ void setup() {
 
 
 
-SimplePatternList gPatterns = {rainbow, rainbowWithGlitter, confetti, sinelon, juggle, bpm };               // Don't know why this has to be here. . .
+SimplePatternList gPatterns = {rainbow, white, green, red, blue, aqua, yellow, orange, pink, purple, effect1, effect2 };               // Don't know why this has to be here. . .
 
  
 
@@ -151,68 +156,99 @@ void rainbow() {
 
 
 
-void rainbowWithGlitter() {
+void white() {
 
-  rainbow();                                                  // Built-in FastLED rainbow, plus some random sparkly glitter.
-  addGlitter(80);
+fill_solid(leds, NUM_LEDS, CRGB::White);  
+
   
-} // rainbowWithGlitter()
+} // White()
+
+
+void green() {
+
+fill_solid(leds, NUM_LEDS, CRGB::Green);  
+
+  
+} // Green()
 
 
 
-void addGlitter(fract8 chanceOfGlitter) {
+void red() {
 
-  if(random8() < chanceOfGlitter) {
-    leds[ random16(NUM_LEDS) ] += CRGB::White;
-  }
-
-} // addGlitter()
+  fill_solid(leds, NUM_LEDS, CRGB::Red);  
 
 
+} // Red()
 
-void confetti() {                                             // Random colored speckles that blink in and fade smoothly.
 
-  fadeToBlackBy(leds, NUM_LEDS, 10);
+
+void blue() {                                             // Random colored speckles that blink in and fade smoothly.
+
+fill_solid(leds, NUM_LEDS, CRGB::Blue);  
+
+  
+} // Blue()
+
+
+
+void aqua() {                                              // A colored dot sweeping back and forth, with fading trails.
+
+fill_solid(leds, NUM_LEDS, CRGB::Aqua);  
+
+  
+} // Aqua()
+
+
+
+void yellow() {                                                  // Colored stripes pulsing at a defined Beats-Per-Minute.
+
+ fill_solid(leds, NUM_LEDS, CRGB::Yellow);  
+  
+} // Yellow()
+
+
+
+void orange() {                                               // Eight colored dots, weaving in and out of sync with each other.
+
+fill_solid(leds, NUM_LEDS, CRGB::Orange);  
+
+  
+  
+} // Orange()
+
+void pink() {                                               // Eight colored dots, weaving in and out of sync with each other.
+
+fill_solid(leds, NUM_LEDS, CRGB::DeepPink);  
+
+  
+  
+} // Pink()
+
+void purple() {                                               // Eight colored dots, weaving in and out of sync with each other.
+
+fill_solid(leds, NUM_LEDS, CRGB::Purple);  
+
+  
+  
+} // Purple()
+
+
+void effect1() {                                               // Eight colored dots, weaving in and out of sync with each other.
+
+ // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy( leds, NUM_LEDS, 20);
+  int pos = beatsin16( 13, 0, NUM_LEDS-1 );
+  leds[pos] += CHSV( gHue, 255, 192);
+  
+  
+} // Sweeping effect()
+
+void effect2() {  
+  
+  // random colored speckles that blink in and fade smoothly
+  fadeToBlackBy( leds, NUM_LEDS, 10);
   int pos = random16(NUM_LEDS);
-  leds[pos] += CHSV(gHue + random8(64), 200, 255);
+  leds[pos] += CHSV( gHue + random8(64), 200, 255);
   
-} // confetti()
-
-
-
-void sinelon() {                                              // A colored dot sweeping back and forth, with fading trails.
-
-  fadeToBlackBy(leds, NUM_LEDS, 20);
-  int pos = beatsin16(13,0,NUM_LEDS);
-  leds[pos] += CHSV(gHue, 255, 192);
   
-} // sinelon()
-
-
-
-void bpm() {                                                  // Colored stripes pulsing at a defined Beats-Per-Minute.
-
-  uint8_t BeatsPerMinute = 62;
-  CRGBPalette16 palette = PartyColors_p;
-  uint8_t beat = beatsin8(BeatsPerMinute, 64, 255);
-  
-  for(int i = 0; i < NUM_LEDS; i++) { //9948
-    leds[i] = ColorFromPalette(palette, gHue+(i*2), beat-gHue+(i*10));
-  }
-  
-} // bpm()
-
-
-
-void juggle() {                                               // Eight colored dots, weaving in and out of sync with each other.
-
-  fadeToBlackBy(leds, NUM_LEDS, 20);
-  byte dothue = 0;
-  
-  for(int i = 0; i < 8; i++) {
-    leds[beatsin16(i+7,0,NUM_LEDS)] |= CHSV(dothue, 200, 255);
-    dothue += 32;
-  }
-  
-} // juggle()
-
+} // Confetti and shit()
